@@ -1,9 +1,7 @@
 "use server"
-import { Bird } from "@/lib/types"
 import { revalidatePath } from "next/cache"
 
 export async function createBird({ body }: { body: FormData }) {
-  console.log(body)
   try {
     const response = await fetch(`${process.env.BASE_URL}/create-bird`, {
       method: "POST",
@@ -75,19 +73,22 @@ export async function getASingleBird(id: string) {
   }
 }
 
-export async function updataBird(bird: Bird, id: string) {
-  const res = await fetch(`${process.env.BASE_URL}/${id}`, {
-    method: "PATCH",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(bird),
-  })
+export async function updataBird(bird: any, id: string | undefined) {
   try {
+    console.log(bird)
+    console.log(id)
+    const res = await fetch(`${process.env.BASE_URL}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(bird),
+    })
+
     const data = await res.json()
     if (!res.ok) {
       const errorData = await res.json()
-      // console.log(errorData)
+      console.log(errorData)
       return {
         message: errorData.message,
         status: errorData.status,

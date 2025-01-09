@@ -70,7 +70,7 @@ const CreateBirdForm = ({
 
   async function onSubmit(data: createBirdFormType) {
     const appearance = {
-      colors: selected_color,
+      color: selected_color,
       size: data.size,
     }
     // console.log(date)
@@ -113,6 +113,34 @@ const CreateBirdForm = ({
     <div>
       <DialogContent>
         <Form {...form}>
+          <div>
+            <div className="flex gap-x-4 items-center">
+              <div className="space-y-3">
+                <div className=" flex gap-x-3">
+                  <Input
+                    id="picture"
+                    onChange={handleImageChange}
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    name="profileImage"
+                    accept=".jpg, .png, .jpeg"
+                    className="max-w-[40.5%]   "
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      fileInputRef.current?.click()
+                    }}
+                    className=" text-xs rounded-sm  bg-dashboardBaseColor text-white px-2"
+                  >
+                    Choose Images
+                  </button>
+                </div>
+              </div>
+            </div>
+            <hr className=" mt-7 mb-1" />
+          </div>
           <div className="pb-3 3xl:py-5 ">
             <form
               onSubmit={form.handleSubmit(onSubmit)}

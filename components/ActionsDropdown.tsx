@@ -31,10 +31,11 @@ export function DataTableDropdownOptions<TData>({
 }: DataTableViewOptionsProps<TData, any>) {
   const [openModal, setOpenModal] = useState(false)
   const [openUpdateModal, setOpenUpdateModal] = useState(false)
+  const [open, setOpen] = useState(false)
   const [loadingDelete, setLoadingDelete] = useState(false)
   const [birdId, setBirdId] = useState("")
   const [bird, setBird] = useState(null)
-  const [open, setOpen] = useState(false)
+  // const [openUpsa, setOpen] = useState(false)
 
   const router = useRouter()
   console.log(bird)
@@ -68,23 +69,22 @@ export function DataTableDropdownOptions<TData>({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          <Dialog open={open} onOpenChange={setOpen}>
+          {/* <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className=" text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem]">
               View more details
             </DialogTrigger>
             <UpdateBirdForm setOpen={setOpen} bird={bird} />
-          </Dialog>
+          </Dialog> */}
 
-          <DropdownMenuItem
-            className=" text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem] cursor-pointer"
-            onClick={() => {
-              setOpenUpdateModal(true)
-              setBird(row.original)
-              //   console.log(row.original.id)
-            }}
-          >
-            Update
-          </DropdownMenuItem>
+          <Dialog open={openUpdateModal} onOpenChange={setOpenUpdateModal}>
+            <DialogTrigger
+              onClick={() => setBird(row.original)}
+              className=" text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem]"
+            >
+              Update
+            </DialogTrigger>
+            <UpdateBirdForm setOpen={setOpen} bird={bird} />
+          </Dialog>
 
           <DropdownMenuItem
             className="text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem] cursor-pointer"

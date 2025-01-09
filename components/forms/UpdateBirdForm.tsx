@@ -1,12 +1,11 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { Form } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 
 import { useState } from "react"
 import { toast } from "sonner"
@@ -17,7 +16,7 @@ import { MultiSelect } from "react-multi-select-component"
 
 import InputCom from "./InputCom"
 import SelectCom from "./SelectCom"
-import { createBird } from "@/actions/birds"
+import { updataBird } from "@/actions/birds"
 import { birdSchema } from "../form-schemas/bird-schema"
 import { colors, habitats } from "@/lib/utils"
 import { Bird } from "@/lib/types"
@@ -34,81 +33,76 @@ const UpdateBirdForm = ({
   bird,
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  bird: Bird
+  bird: Bird | null
 }) => {
-  const [habitat, setHabitat] = useState<MultipleSelect[]>([])
-  const [color, setColor] = useState<MultipleSelect[]>([])
-  const [birdImage, setBirdImage] = useState<File[]>([])
-  const fileInputRef = React.useRef<HTMLInputElement>(null)
+  // console.log(colorss)
+  const [habitat, setHabitat] = useState<MultipleSelect[]>(
+    bird?.habitat?.map((item) => ({
+      label: item,
+      value: item,
+      disabled: !!item,
+    })) || []
+  )
+  const [color, setColor] = useState<MultipleSelect[]>(
+    bird?.appearance?.color?.map((item) => ({
+      label: item,
+      value: item,
+      disabled: !!item,
+    })) || []
+  )
   console.log(bird)
 
   let selected_habitat = ""
 
-  habitat.forEach((item) => {
+  habitat?.forEach((item) => {
     selected_habitat += item.value + " "
   })
 
   let selected_color = ""
 
-  color.forEach((item) => {
+  color?.forEach((item) => {
     selected_color += item.value + " "
   })
 
   const router = useRouter()
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files) return
-
-    const selectedFiles = event.target.files
-
-    if (selectedFiles) {
-      const newFiles = Array.from(selectedFiles)
-      setBirdImage((prevFiles) => [...prevFiles, ...newFiles])
-    }
-  }
 
   // Array.from(files).forEach((file) => URL.revokeObjectURL(file))
 
   const form = useForm<createBirdFormType>({
     resolver: zodResolver(birdSchema),
     defaultValues: {
-      commonName: "kjk",
-      scientificName: "gcgcg",
-      description: "hgvhgv",
-      size: "Large",
+      commonName: "dgdg",
+      scientificName: bird?.scientificName,
+      description: bird?.description,
+      size: bird?.appearance?.size,
     },
   })
 
   async function onSubmit(data: createBirdFormType) {
     const appearance = {
-      colors: selected_color,
-      size: data.size,
+      size: data.size || "",
+      color: selected_color,
     }
-    // console.log(date)
-    const formData = new FormData()
-    formData.append("commonName", data?.commonName)
-    formData.append("scientificName", data?.scientificName)
-    formData.append("description", data?.description)
-
-    formData.append("habitat", selected_habitat || "")
-    formData.append("appearance", JSON.stringify(appearance))
-
-    // formData.append("appearance", appearance)
-    birdImage.forEach((file) => {
-      formData.append("photos", file)
-    })
-
-    // console.log(formData)
 
     try {
-      const res = await createBird({ body: formData })
+      const res = await updataBird(
+        {
+          commonName: data.commonName,
+          scientificName: data.scientificName,
+          description: data.scientificName,
+          habitat: selected_habitat,
+          appearance: appearance,
+        },
+        bird?._id
+      )
       // console.log(res)
       if (res.status && res.status !== "success") {
-        toast.error(res.message || "Error creating new bird")
+        toast.error(res.message || "Error updating bird")
         return
       }
       // setAdminUser(data)
       router.refresh()
-      toast.success(res.message || "Bird created successfully")
+      toast.success(res.message || "Bird updated successfully")
       setTimeout(() => {
         setOpen(false)
       }, 1000)
@@ -119,38 +113,18 @@ const UpdateBirdForm = ({
     } finally {
     }
   }
+  useEffect(() => {
+    form.reset({
+      commonName: bird?.commonName,
+      scientificName: bird?.scientificName,
+      description: bird?.description,
+      size: bird?.appearance?.size,
+    })
+  }, [bird, form])
   return (
     <div>
       <DialogContent>
         <Form {...form}>
-          <div>
-            <div className="flex gap-x-4 items-center">
-              <div className="space-y-3">
-                <div className=" flex gap-x-3">
-                  <Input
-                    id="picture"
-                    onChange={handleImageChange}
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    name="profileImage"
-                    accept=".jpg, .png, .jpeg"
-                    className="max-w-[40.5%]   "
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      fileInputRef.current?.click()
-                    }}
-                    className=" text-xs rounded-sm  bg-dashboardBaseColor text-white px-2"
-                  >
-                    Choose Images
-                  </button>
-                </div>
-              </div>
-            </div>
-            <hr className=" mt-7 mb-1" />
-          </div>
           <div className="pb-3 3xl:py-5 ">
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -182,7 +156,7 @@ const UpdateBirdForm = ({
                     className="  border-none bg-card  text-xs font-medium text-[#6B7280] "
                     options={colors}
                     value={color}
-                    shouldToggleOnHover={true}
+                    // shouldToggleOnHover={true}
                     onChange={setColor}
                     labelledBy="Select"
                   />
@@ -198,7 +172,7 @@ const UpdateBirdForm = ({
                     className="  border-none bg-card  text-xs font-medium text-[#6B7280] "
                     options={habitats}
                     value={habitat}
-                    shouldToggleOnHover={true}
+                    // shouldToggleOnHover={true}
                     onChange={setHabitat}
                     labelledBy="Select"
                   />
@@ -227,8 +201,8 @@ const UpdateBirdForm = ({
                 className=" w-full"
               >
                 {form.formState.isSubmitting
-                  ? "Creating new bird..."
-                  : "Create bird"}
+                  ? "Updating bird..."
+                  : "Update bird"}
               </SaveButton>
             </form>
           </div>
