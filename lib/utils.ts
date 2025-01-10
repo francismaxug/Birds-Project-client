@@ -24,9 +24,9 @@ export const colors = [
 
 
 export function shortenDescription(str: string, maxWords = 8) {
-  const words = str.split(" ")
+  const words = str?.split(" ")
   if (words.length > maxWords) {
-    return words.slice(0, maxWords).join(" ") + "..."
+    return words?.slice(0, maxWords)?.join(" ") + "..."
   }
   console.log(str, words)
   return str
