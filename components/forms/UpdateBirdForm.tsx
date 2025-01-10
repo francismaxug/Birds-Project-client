@@ -39,26 +39,6 @@ const UpdateBirdForm = ({
   const [habitat, setHabitat] = useState<MultipleSelect[]>([])
   const [color, setColor] = useState<MultipleSelect[]>([])
 
-  useEffect(() => {
-    if (bird?.habitat || bird.appearance.color) {
-      setHabitat(
-        bird.habitat.map((item) => ({
-          label: item,
-          value: item,
-          disabled: !!item,
-        }))
-      )
-
-      setColor(
-        bird?.appearance?.color?.map((item) => ({
-          label: item,
-          value: item,
-          disabled: !!item,
-        }))
-      )
-    }
-  }, [bird])
-
   let selected_habitat = ""
 
   habitat?.forEach((item) => {
@@ -120,6 +100,23 @@ const UpdateBirdForm = ({
       description: bird?.description,
       size: bird?.appearance?.size,
     })
+    if (bird?.habitat || bird?.appearance?.color) {
+      setHabitat(
+        bird.habitat.map((item) => ({
+          label: item,
+          value: item,
+          disabled: !!item,
+        }))
+      )
+
+      setColor(
+        bird?.appearance?.color?.map((item) => ({
+          label: item,
+          value: item,
+          disabled: !!item,
+        }))
+      )
+    }
   }, [bird, form])
   return (
     <div>
