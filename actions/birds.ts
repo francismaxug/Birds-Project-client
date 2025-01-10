@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache"
 export async function createBird({ body }: { body: FormData }) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/create-bird`,
+      `${process.env.NEXT_PUBLIC_API_URL}/create-bird`,
       {
         method: "POST",
         credentials: "include",
@@ -37,7 +37,7 @@ export async function getAllbird() {
   // console.log(process.env.BASE_URL)
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/getAllBirds`,
+    `${process.env.NEXT_PUBLIC_API_URL}/getAllBirds`,
     {
       cache: "no-store",
     }
@@ -58,7 +58,7 @@ export async function getAllbird() {
   return data
 }
 export async function getASingleBird(id: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${id}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${id}`)
   try {
     const data = await res.json()
     if (!res.ok) {
@@ -83,7 +83,7 @@ export async function updataBird(
   try {
     // console.log(bird)
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${id}`, {
       method: "PATCH",
       credentials: "include",
       headers: {
@@ -111,7 +111,7 @@ export async function updataBird(
 
 export async function deleteBird(birdId: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${birdId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/${birdId}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
