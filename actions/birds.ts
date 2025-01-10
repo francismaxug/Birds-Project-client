@@ -32,27 +32,24 @@ export async function createBird({ body }: { body: FormData }) {
 
 export async function getAllbird() {
   // console.log(process.env.BASE_URL)
-  try {
-    const response = await fetch(`${process.env.BASE_URL}/getAllBirds`, {
-      cache: "no-store",
-    })
-    // console.log(process.env.BASE_URL)
 
-    if (!response.ok) {
-      const errorData = await response.json()
-      // console.log(errorData)
-      return {
-        message: errorData.message,
-        status: errorData.status,
-      }
+  const response = await fetch(`${process.env.BASE_URL}/getAllBirds`, {
+    cache: "no-store",
+  })
+  // console.log(process.env.BASE_URL)
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    // console.log(errorData)
+    return {
+      message: errorData.message,
+      status: errorData.status,
     }
-
-    const data = await response.json()
-    // console.log(data)
-    return data
-  } catch (err) {
-    console.log(err)
   }
+
+  const data = await response.json()
+  // console.log(data)
+  return data
 }
 export async function getASingleBird(id: string) {
   const res = await fetch(`${process.env.BASE_URL}/${id}`)
