@@ -8,6 +8,7 @@ import { DataTableColumnHeader } from "./ColumnSortable"
 import { DataTableDropdownOptions } from "../ActionsDropdown"
 import CheckBox from "./CheckBox"
 import { Bird } from "@/lib/types"
+import { shortenDescription } from "@/lib/utils"
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -49,6 +50,15 @@ export const columns: ColumnDef<Bird>[] = [
     header: ({ column }) => {
       return (
         <div className="text-[0.9rem] hover:bg-transparent">Description</div>
+      )
+    },
+    cell: ({ row }) => {
+      const description = row.getValue("description") as string
+
+      return (
+        <div className="">
+          {shortenDescription(description)}
+        </div>
       )
     },
   },

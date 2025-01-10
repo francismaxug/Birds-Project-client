@@ -95,7 +95,7 @@ export function DataTable<TData, TValue>({
   // }, [table.getState().rowSelection])
 
   return (
-    <div className=" mx-auto max-w-[90%] space-y-7 my-6">
+    <div className=" mx-auto max-w-[80%] space-y-7 my-6">
       <div className=" text-2xl font-bold text-center">Birds Data</div>
       <div>
         <div className="flex items-center py-4 gap-x-4 mb-4 flex-wrap gap-y-3">
