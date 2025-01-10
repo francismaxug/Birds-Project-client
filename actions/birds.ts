@@ -3,14 +3,17 @@ import { revalidatePath } from "next/cache"
 
 export async function createBird({ body }: { body: FormData }) {
   try {
-    const response = await fetch(`${process.env.BASE_URL}/create-bird`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        // "Content-Type": "multipart/form-data",
-      },
-      body,
-    })
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/create-bird`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          // "Content-Type": "multipart/form-data",
+        },
+        body,
+      }
+    )
 
     if (!response.ok) {
       const errorData = await response.json()
@@ -27,15 +30,18 @@ export async function createBird({ body }: { body: FormData }) {
   } catch (error) {
     console.log(error)
   }
-  revalidatePath("/")
+  revalidatePath("/birds")
 }
 
 export async function getAllbird() {
   // console.log(process.env.BASE_URL)
 
-  const response = await fetch(`${process.env.BASE_URL}/getAllBirds`, {
-    cache: "no-store",
-  })
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/getAllBirds`,
+    {
+      cache: "no-store",
+    }
+  )
   // console.log(process.env.BASE_URL)
 
   if (!response.ok) {
@@ -52,7 +58,7 @@ export async function getAllbird() {
   return data
 }
 export async function getASingleBird(id: string) {
-  const res = await fetch(`${process.env.BASE_URL}/${id}`)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${id}`)
   try {
     const data = await res.json()
     if (!res.ok) {
@@ -77,7 +83,7 @@ export async function updataBird(
   try {
     // console.log(bird)
 
-    const res = await fetch(`${process.env.BASE_URL}/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${id}`, {
       method: "PATCH",
       credentials: "include",
       headers: {
@@ -100,12 +106,12 @@ export async function updataBird(
   } catch (error) {
     console.log(error)
   }
-  revalidatePath("/")
+  revalidatePath("/birds")
 }
 
 export async function deleteBird(birdId: string) {
   try {
-    const res = await fetch(`${process.env.BASE_URL}/${birdId}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${birdId}`, {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
@@ -126,5 +132,5 @@ export async function deleteBird(birdId: string) {
   } catch (error) {
     console.log(error)
   }
-  revalidatePath("/")
+  revalidatePath("/birds")
 }
