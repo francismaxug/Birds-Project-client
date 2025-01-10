@@ -1,6 +1,6 @@
 export function SkeletonLoader() {
   return (
-    <div className="mx-auto max-w-[90%] space-y-7 my-6">
+    <div className="mx-auto max-w-[90%] space-y-7 my-6 mt-12">
       <div className="mb-6 bg-white px-3.5 py-3 rounded-lg animate-pulse">
         <div className="flex items-center justify-between">
           <div className="h-6 w-24 bg-gray-200 rounded"></div>

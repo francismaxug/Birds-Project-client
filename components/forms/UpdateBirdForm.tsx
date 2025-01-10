@@ -33,7 +33,7 @@ const UpdateBirdForm = ({
   bird,
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  bird: Bird | null
+  bird: Bird
 }) => {
   // console.log(colorss)
   const [habitat, setHabitat] = useState<MultipleSelect[]>(
@@ -44,13 +44,14 @@ const UpdateBirdForm = ({
     })) || []
   )
   const [color, setColor] = useState<MultipleSelect[]>(
-    bird?.appearance?.color?.map((item) => ({
-      label: item,
-      value: item,
-      disabled: !!item,
-    })) || []
+    (bird &&
+      bird?.appearance?.color?.map((item) => ({
+        label: item,
+        value: item,
+        disabled: !!item,
+      }))) ||
+      []
   )
-  console.log(bird)
 
   let selected_habitat = ""
 
@@ -70,31 +71,24 @@ const UpdateBirdForm = ({
 
   const form = useForm<createBirdFormType>({
     resolver: zodResolver(birdSchema),
-    defaultValues: {
-      commonName: "dgdg",
-      scientificName: bird?.scientificName,
-      description: bird?.description,
-      size: bird?.appearance?.size,
-    },
   })
 
   async function onSubmit(data: createBirdFormType) {
     const appearance = {
-      size: data.size || "",
+      size: data.size,
       color: selected_color,
     }
+    console.log(appearance)
+    const formData = new FormData()
+    formData.append("commonName", data?.commonName)
+    formData.append("scientificName", data?.scientificName)
+    formData.append("description", data?.description)
+
+    formData.append("habitat", selected_habitat || "")
+    formData.append("appearance", JSON.stringify(appearance))
 
     try {
-      const res = await updataBird(
-        {
-          commonName: data.commonName,
-          scientificName: data.scientificName,
-          description: data.scientificName,
-          habitat: selected_habitat,
-          appearance: appearance,
-        },
-        bird?._id
-      )
+      const res = await updataBird({ body: formData }, bird?._id)
       // console.log(res)
       if (res.status && res.status !== "success") {
         toast.error(res.message || "Error updating bird")

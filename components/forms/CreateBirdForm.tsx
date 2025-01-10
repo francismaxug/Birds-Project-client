@@ -35,7 +35,7 @@ const CreateBirdForm = ({
 }) => {
   const [habitat, setHabitat] = useState<MultipleSelect[]>([])
   const [color, setColor] = useState<MultipleSelect[]>([])
-  const [birdImage, setBirdImage] = useState<File[]>([])
+  const [birdImage, setBirdImage] = useState<File[] | []>([])
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
   let selected_habitat = ""
@@ -70,10 +70,10 @@ const CreateBirdForm = ({
 
   async function onSubmit(data: createBirdFormType) {
     const appearance = {
-      color: selected_color,
       size: data.size,
+      color: selected_color,
     }
-    // console.log(date)
+    console.log(appearance)
     const formData = new FormData()
     formData.append("commonName", data?.commonName)
     formData.append("scientificName", data?.scientificName)
@@ -83,7 +83,7 @@ const CreateBirdForm = ({
     formData.append("appearance", JSON.stringify(appearance))
 
     // formData.append("appearance", appearance)
-    birdImage.forEach((file) => {
+    birdImage?.forEach((file) => {
       formData.append("photos", file)
     })
 
@@ -102,7 +102,9 @@ const CreateBirdForm = ({
       setTimeout(() => {
         setOpen(false)
       }, 1000)
-      // setOpen(false)
+      setOpen(false)
+      form.reset()
+      setBirdImage([])
       // console.log(data)
     } catch (error) {
       console.log(error)
@@ -111,10 +113,10 @@ const CreateBirdForm = ({
   }
   return (
     <div>
-      <DialogContent>
+      <DialogContent className=" max-w-[36rem]">
         <Form {...form}>
           <div>
-            <div className="flex gap-x-4 items-center">
+            <div className="flex gap-x-4  items-center">
               <div className="space-y-3">
                 <div className=" flex gap-x-3">
                   <Input
@@ -146,7 +148,7 @@ const CreateBirdForm = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className={`space-y-6 `}
             >
-              <div className=" grid grid-cols-2 gap-x-7 pb-3 gap-y-4 items-center">
+              <div className=" grid grid-cols-2 gap-x-7 pb-3 gap-y-5 items-start">
                 <InputCom
                   title="Common Name"
                   placeholder="Common name"

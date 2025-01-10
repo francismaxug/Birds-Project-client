@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import { deleteBird } from "@/actions/birds"
 import UpdateBirdForm from "./forms/UpdateBirdForm"
+import ViewMore from "./ViewMore"
 
 interface DataTableViewOptionsProps<TData, RowData> {
   row: RowData
@@ -38,7 +39,7 @@ export function DataTableDropdownOptions<TData>({
   // const [openUpsa, setOpen] = useState(false)
 
   const router = useRouter()
-  console.log(bird)
+  // console.log(bird)
 
   const onConfirmDelete = async () => {
     try {
@@ -69,12 +70,15 @@ export function DataTableDropdownOptions<TData>({
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
-          {/* <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger className=" text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem]">
+          <Dialog open={open} onOpenChange={setOpen} >
+            <DialogTrigger
+              onClick={() => setBird(row.original)}
+              className=" text-[0.8rem]  w-full text-left pl-2 text-gray-600 hover:bg-gray-100 rounded py-[0.3rem]"
+            >
               View more details
             </DialogTrigger>
-            <UpdateBirdForm setOpen={setOpen} bird={bird} />
-          </Dialog> */}
+            <ViewMore bird={bird} />
+          </Dialog>
 
           <Dialog open={openUpdateModal} onOpenChange={setOpenUpdateModal}>
             <DialogTrigger
@@ -83,7 +87,7 @@ export function DataTableDropdownOptions<TData>({
             >
               Update
             </DialogTrigger>
-            <UpdateBirdForm setOpen={setOpen} bird={bird} />
+            <UpdateBirdForm setOpen={setOpen} bird={bird!} />
           </Dialog>
 
           <DropdownMenuItem

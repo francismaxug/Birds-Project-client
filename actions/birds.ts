@@ -73,16 +73,20 @@ export async function getASingleBird(id: string) {
   }
 }
 
-export async function updataBird(bird: any, id: string | undefined) {
+export async function updataBird(
+  { body }: { body: FormData },
+  id: string | undefined
+) {
   try {
-    console.log(bird)
-    console.log(id)
+    // console.log(bird)
+
     const res = await fetch(`${process.env.BASE_URL}/${id}`, {
       method: "PATCH",
+      credentials: "include",
       headers: {
-        "content-type": "application/json",
+        // "content-type": "application/json",
       },
-      body: JSON.stringify(bird),
+      body,
     })
 
     const data = await res.json()

@@ -9,7 +9,6 @@ export const habitats = [
   { label: "Woodlands", value: "Woodlands" },
   { label: "Backyards", value: "Backyards" },
   { label: "Forests", value: "Forests" },
-  { label: "Urban Areas", value: "Urban Areas" },
   { label: "Desert", value: "Desert" },
   { label: "Meadows", value: "Meadows" },
   { label: "Gardens", value: "Gardens" },

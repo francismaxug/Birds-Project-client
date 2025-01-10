@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
       <div>
         <div className="flex items-center py-4 gap-x-4 mb-4 flex-wrap gap-y-3">
           <Input
-            placeholder="Filter bird names..."
+            placeholder="Search by name..."
             value={
               (table.getColumn("commonName")?.getFilterValue() as string) ?? ""
             }
@@ -142,7 +142,7 @@ export function DataTable<TData, TValue>({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          
+
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger className="ml-auto bg-dashboardBaseColor text-[0.9rem] hover:bg-dashboardBaseColor/80 cursor-pointer text-card duration-200 ease-linear px-3 py-1.5 rounded-sm motion-scale-in-[30%] motion-delay-[50ms] motion-ease-spring-bouncier motion-opacity-in-0">
               <IoIosAdd className="inline-block mr-2 text-white font-bold text-[1.2rem]" />
