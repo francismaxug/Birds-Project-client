@@ -48,7 +48,7 @@ export async function getAllbird() {
     }
 
     const data = await response.json()
-    console.log(data)
+    // console.log(data)
     return data
   } catch (err) {
     console.log(err)
@@ -123,7 +123,7 @@ export async function deleteBird(birdId: string) {
       }
     }
     const data = await res.json()
-    console.log(data)
+    // console.log(data)
 
     return data
   } catch (error) {
